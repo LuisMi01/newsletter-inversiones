@@ -1,0 +1,175 @@
+# =====================================================================
+#  Configuración — Newsletter diaria de Inversiones   (foto: 11/06/2026)
+#  Edita SOLO este fichero cuando cambie tu cartera o tu watchlist.
+#  Refresca "exposicion_subyacente" cuando bajes un X-Ray nuevo de MyInvestor.
+# =====================================================================
+
+idioma: español
+profundidad: detallado_con_analisis     # resumen_agil | detallado_con_analisis | exhaustivo
+canal_entrega: borrador_gmail            # crea borrador en Gmail dirigido a email_destino
+email_destino: "luismiguelurbez@icloud.com"
+
+mercados_seguimiento:
+  - España / IBEX 35
+  - Europa (EuroStoxx 600)
+  - EE.UU. (S&P 500, Nasdaq 100)
+  - Global y emergentes (MSCI World / EM, China)
+  - Materias primas (oro, petróleo, cobre, uranio, metales)
+
+# ---------------------------------------------------------------------
+#  CARTERA DE FONDOS  (MyInvestor) — valor ~6.337 €
+#  peso_pct = peso sobre la cartera de fondos
+# ---------------------------------------------------------------------
+fondos:
+  - nombre: Fidelity MSCI World Index Fund EUR P Acc
+    isin: IE00BYX5NX33
+    peso_pct: 51.98
+    categoria: RV Global
+    gestora: Fidelity
+  - nombre: Horos Value Internacional FI
+    isin: ES0146309002
+    peso_pct: 22.05
+    categoria: Value Europa/Global
+    gestora: Horos
+  - nombre: iShares Emerging Markets Index Fund (IE) Acc EUR clase S
+    isin: IE000QAZP7L2
+    peso_pct: 9.90
+    categoria: Mercados Emergentes
+    gestora: BlackRock
+  - nombre: Pictet-China Index P EUR
+    isin: LU0625737910
+    peso_pct: 6.71
+    categoria: RV China
+    gestora: Pictet
+  - nombre: Cobas International Fund P Acc EUR
+    isin: LU1598719752
+    peso_pct: 6.24
+    categoria: Value
+    gestora: Cobas AM
+  - nombre: Vanguard Global Small-Cap Index Investor EUR Acc
+    isin: IE00B42W3S00
+    peso_pct: 3.13
+    categoria: Small Cap Global
+    gestora: Vanguard
+
+# ---------------------------------------------------------------------
+#  ACCIONES & ETF  (broker) — valor ~3.151 €
+# ---------------------------------------------------------------------
+acciones_etf:
+  - nombre: Amper S.A.
+    ticker: AMP
+    isin: ES0109260531
+    mercado: España (BME / IBEX)
+    sector: Industriales / Defensa
+    peso_pct_subcartera: 15.29
+  - nombre: VanEck Morningstar Developed Markets Dividend Leaders
+    ticker: TDIV
+    isin: NL0011683594
+    mercado: Euronext Ámsterdam
+    sector: Dividendos global
+    yield_pct: 3.34
+    peso_pct_subcartera: 84.71
+
+# ---------------------------------------------------------------------
+#  LIQUIDEZ  (relevante para el bloque de tipos / BCE)
+# ---------------------------------------------------------------------
+liquidez:
+  - cuenta: Trade Republic (Cuenta Remunerada BCE)
+    saldo_eur: 2665.22
+    tae_pct: 2.02
+  - cuenta: Bankinter (nómina)
+    saldo_eur: 150.00
+
+# ---------------------------------------------------------------------
+#  EXPOSICIÓN SUBYACENTE (look-through)  — del X-Ray de Morningstar
+#  CLAVE: muchas noticias te afectan por estas posiciones, no por el fondo.
+#  Refréscalo periódicamente con tu informe X-Ray.
+# ---------------------------------------------------------------------
+exposicion_subyacente:
+  asignacion:
+    acciones_pct: 88.80
+    efectivo_pct: 1.42
+    no_clasificado_pct: 9.76   # = iShares EM, sin look-through en el X-Ray
+  por_pais_pct:
+    Estados Unidos: 46.45
+    China: 7.57
+    Francia: 6.51
+    España: 5.53
+    Japón: 3.90
+    Canadá: 3.64
+    Reino Unido: 3.44
+    Alemania: 2.95
+    Noruega: 2.89
+    Italia: 2.12
+  por_sector_pct:
+    Tecnología: 20.95
+    Consumo Cíclico: 15.76
+    Servicios Financieros: 14.72
+    Industria: 11.77
+    Servicios Comunicación: 8.58
+    Energía: 7.51
+    Salud: 6.85
+    Materiales Básicos: 5.12
+    Consumo Defensivo: 3.98
+    Utilities: 2.65
+    Inmobiliario: 1.99
+  top_posiciones_subyacentes:   # las que más mueven tu cartera
+    - NVIDIA (2,80%)
+    - Apple (2,49%)
+    - TGS ASA — energía/oil services, Noruega (1,81%)
+    - Microsoft (1,66%)
+    - Amazon (1,38%)
+    - Alphabet A+C (~2,2%)
+    - Pluxee (1,14%)
+    - Broadcom (1,03%)
+    - Naspers ADR (0,97%)
+  notas:
+    - "Sesgo dominante: growth large-cap EE.UU.; las megacaps tech mueven la cartera más que cualquier fondo individual."
+    - "Energía concentrada en TGS ASA (Noruega) vía Cobas/Horos: petróleo y oil services son catalizador directo."
+    - "China entra por Pictet-China (6,7%) + parte del iShares EM."
+    - "P/E cartera 15,95 · P/B 2,52 · Sharpe 3a 1,44 · Volatilidad 3a 10,5%."
+
+# ---------------------------------------------------------------------
+#  WATCHLIST  ("interesantes": mix de acciones y fondos, no comprados)
+# ---------------------------------------------------------------------
+watchlist:
+  - nombre: Yellow Cake PLC
+    ticker: YCA
+    mercado: LSE (AIM)
+    tesis: Proxy del precio del uranio (almacena U3O8 físico)
+  - nombre: Atalaya Mining
+    ticker: ATYM
+    mercado: LSE / BME
+    tesis: Cobre (mina Riotinto, Huelva); palanca al precio del cobre
+  - nombre: Unusual Whales Subversive Democratic Trading ETF
+    ticker: NANC
+    mercado: NYSE Arca
+    tesis: Replica operaciones bursátiles de congresistas demócratas (EE.UU.)
+  - nombre: TransMedics Group
+    ticker: TMDX
+    mercado: Nasdaq
+    tesis: Tecnología de trasplante de órganos; growth med-tech
+  - nombre: ServiceNow
+    ticker: NOW
+    mercado: NYSE
+    tesis: Software empresarial / workflow + IA
+  - nombre: Monro Inc.
+    ticker: MNRO
+    mercado: Nasdaq
+    tesis: Retail de servicios de automoción (EE.UU.)
+  - nombre: Gestión Boutique V Gerunda Global BP FI
+    isin: ES0131462220
+    plataforma: MyInvestor
+    tesis: Fondo boutique global; seguimiento para posible entrada
+
+# ---------------------------------------------------------------------
+secciones:
+  - Titular del día
+  - Mercados
+  - Economía y bancos centrales
+  - Corporativo (OPAs, IPOs, M&A, quiebras, resultados)
+  - Materias primas
+  - Impacto en mi cartera (vía look-through)
+  - Watchlist
+  - Conclusiones del día
+  - Fuentes
