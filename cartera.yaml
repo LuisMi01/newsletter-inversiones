@@ -6,8 +6,9 @@
 
 idioma: español
 profundidad: detallado_con_analisis     # resumen_agil | detallado_con_analisis | exhaustivo
-canal_entrega: borrador_gmail            # crea borrador en Gmail dirigido a email_destino
-email_destino: "luismiguelurbez@icloud.com"
+canal_entrega: notion                    # publica una página diaria en Notion
+destino_notion:
+  pagina_padre: "Newsletter de Inversiones"   # crea aquí una subpágina por día (créala antes en Notion)
 
 mercados_seguimiento:
   - España / IBEX 35
