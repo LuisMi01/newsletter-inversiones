@@ -24,32 +24,22 @@ mercados_seguimiento:
 fondos:
   - nombre: Fidelity MSCI World Index Fund EUR P Acc
     isin: IE00BYX5NX33
-    peso_pct: 51.98
+    peso_pct: 60.00
     categoria: RV Global
     gestora: Fidelity
   - nombre: Horos Value Internacional FI
     isin: ES0146309002
-    peso_pct: 22.05
+    peso_pct: 20.00
     categoria: Value Europa/Global
     gestora: Horos
   - nombre: iShares Emerging Markets Index Fund (IE) Acc EUR clase S
     isin: IE000QAZP7L2
-    peso_pct: 9.90
+    peso_pct: 15
     categoria: Mercados Emergentes
     gestora: BlackRock
-  - nombre: Pictet-China Index P EUR
-    isin: LU0625737910
-    peso_pct: 6.71
-    categoria: RV China
-    gestora: Pictet
-  - nombre: Cobas International Fund P Acc EUR
-    isin: LU1598719752
-    peso_pct: 6.24
-    categoria: Value
-    gestora: Cobas AM
   - nombre: Vanguard Global Small-Cap Index Investor EUR Acc
     isin: IE00B42W3S00
-    peso_pct: 3.13
+    peso_pct: 5.00
     categoria: Small Cap Global
     gestora: Vanguard
 
