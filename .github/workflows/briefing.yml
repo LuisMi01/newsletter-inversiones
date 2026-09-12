@@ -1,0 +1,47 @@
+name: Briefing en audio
+
+on:
+  push:
+    paths:
+      - guion.txt
+      - titulares.txt
+  workflow_dispatch:        # permite lanzarlo a mano para probar
+
+jobs:
+  enviar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Dependencias del sistema
+        run: sudo apt-get install -y -qq espeak-ng
+
+      - name: Dependencias de Python
+        run: pip install -q edge-tts piper-tts imageio-ffmpeg
+
+      - name: Cache de la voz de respaldo
+        uses: actions/cache@v4
+        with:
+          path: voces
+          key: piper-es_ES-davefx-medium-v1
+
+      - name: Descargar la voz de respaldo si no está cacheada
+        run: |
+          mkdir -p voces
+          BASE=https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_ES/davefx/medium
+          [ -f voces/es_ES-davefx-medium.onnx ] || \
+            curl -sSL -o voces/es_ES-davefx-medium.onnx "$BASE/es_ES-davefx-medium.onnx"
+          [ -f voces/es_ES-davefx-medium.onnx.json ] || \
+            curl -sSL -o voces/es_ES-davefx-medium.onnx.json "$BASE/es_ES-davefx-medium.onnx.json"
+
+      - name: Sintetizar y enviar
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: python generar_y_enviar.py --guion guion.txt --titulares titulares.txt
