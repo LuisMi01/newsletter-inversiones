@@ -29,12 +29,12 @@ fondos:
     gestora: Fidelity
   - nombre: Horos Value Internacional FI
     isin: ES0146309002
-    peso_pct: 20.00
+    peso_pct: 25.00
     categoria: Value Europa/Global
     gestora: Horos
   - nombre: iShares Emerging Markets Index Fund (IE) Acc EUR clase S
     isin: IE000QAZP7L2
-    peso_pct: 15
+    peso_pct: 10
     categoria: Mercados Emergentes
     gestora: BlackRock
   - nombre: Vanguard Global Small-Cap Index Investor EUR Acc
@@ -42,7 +42,6 @@ fondos:
     peso_pct: 5.00
     categoria: Small Cap Global
     gestora: Vanguard
-
 # ---------------------------------------------------------------------
 #  ACCIONES & ETF  (broker) — valor ~3.151 €
 # ---------------------------------------------------------------------
@@ -52,24 +51,17 @@ acciones_etf:
     isin: ES0109260531
     mercado: España (BME / IBEX)
     sector: Industriales / Defensa
-    peso_pct_subcartera: 15.29
-  - nombre: VanEck Morningstar Developed Markets Dividend Leaders
-    ticker: TDIV
-    isin: NL0011683594
-    mercado: Euronext Ámsterdam
-    sector: Dividendos global
-    yield_pct: 3.34
-    peso_pct_subcartera: 84.71
+    peso_pct_subcartera: 6.63
 
 # ---------------------------------------------------------------------
 #  LIQUIDEZ  (relevante para el bloque de tipos / BCE)
 # ---------------------------------------------------------------------
 liquidez:
   - cuenta: Trade Republic (Cuenta Remunerada BCE)
-    saldo_eur: 2665.22
+    saldo_eur: 3000
     tae_pct: 2.02
   - cuenta: Bankinter (nómina)
-    saldo_eur: 150.00
+    saldo_eur: 200
 
 # ---------------------------------------------------------------------
 #  EXPOSICIÓN SUBYACENTE (look-through)  — del X-Ray de Morningstar
