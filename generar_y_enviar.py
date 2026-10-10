@@ -111,6 +111,11 @@ def sintetizar(texto: str, destino: Path) -> str:
 
 # --- Envio -------------------------------------------------------------------
 
+def destinatario() -> str:
+    """Buzon de destino. Sin DESTINATARIO definido, se envia al propio Gmail."""
+    return os.environ.get("DESTINATARIO") or os.environ["GMAIL_USER"]
+
+
 def duracion_min(mp3: Path) -> int:
     """Estimacion por tamano: fiable con bitrate constante."""
     segundos = mp3.stat().st_size * 8 / (BITRATE * 1000)
@@ -130,7 +135,7 @@ def enviar(mp3: Path, titulares: list[str], motor: str) -> None:
 
     msg = EmailMessage()
     msg["From"] = usuario
-    msg["To"] = usuario
+    msg["To"] = destinatario()
     msg["Subject"] = f"Briefing {hoy.strftime('%d/%m')} — {minutos} min"
     msg.set_content("\n".join(cuerpo))
     msg.add_attachment(
@@ -154,7 +159,7 @@ def enviar_solo_texto(guion: str, motivo: str) -> None:
 
     msg = EmailMessage()
     msg["From"] = usuario
-    msg["To"] = usuario
+    msg["To"] = destinatario()
     msg["Subject"] = f"Briefing {hoy.strftime('%d/%m')} — SIN AUDIO"
     msg.set_content(f"No se pudo generar el audio.\nMotivo: {motivo}\n\n{guion}")
 
