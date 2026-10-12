@@ -51,7 +51,7 @@ acciones_etf:
     isin: ES0109260531
     mercado: España (BME / IBEX)
     sector: Industriales / Defensa
-    peso_pct_subcartera: 6.63
+    peso_pct_subcartera: 5
 
 # ---------------------------------------------------------------------
 #  LIQUIDEZ  (relevante para el bloque de tipos / BCE)
@@ -116,30 +116,18 @@ exposicion_subyacente:
 #  WATCHLIST  ("interesantes": mix de acciones y fondos, no comprados)
 # ---------------------------------------------------------------------
 watchlist:
-  - nombre: Yellow Cake PLC
-    ticker: YCA
-    mercado: LSE (AIM)
-    tesis: Proxy del precio del uranio (almacena U3O8 físico)
-  - nombre: Atalaya Mining
-    ticker: ATYM
-    mercado: LSE / BME
-    tesis: Cobre (mina Riotinto, Huelva); palanca al precio del cobre
-  - nombre: Unusual Whales Subversive Democratic Trading ETF
-    ticker: NANC
-    mercado: NYSE Arca
-    tesis: Replica operaciones bursátiles de congresistas demócratas (EE.UU.)
-  - nombre: TransMedics Group
-    ticker: TMDX
-    mercado: Nasdaq
-    tesis: Tecnología de trasplante de órganos; growth med-tech
-  - nombre: ServiceNow
-    ticker: NOW
-    mercado: NYSE
-    tesis: Software empresarial / workflow + IA
-  - nombre: Monro Inc.
-    ticker: MNRO
-    mercado: Nasdaq
-    tesis: Retail de servicios de automoción (EE.UU.)
+  - nombre: Quntinuum Inc.
+    ticker: QNT
+    mercado: NASDAQ - USA
+    tesis: Inversion en computacion cuantica, buscando la "nueva IA" qué pueda llegar a hacer explotar mi cartera.
+  - nombre: Infleqtion Inc.
+    ticker: INFQ
+    mercado: NYSD - USA
+    tesis: Inversion en computacion cuantica, buscando la "nueva IA" qué pueda llegar a hacer explotar mi cartera.
+  - nombre: IonQ Inc.
+    ticker: IONQ
+    mercado: NYSD - USA
+    tesis: Inversion en computacion cuantica, buscando la "nueva IA" qué pueda llegar a hacer explotar mi cartera.
   - nombre: Gestión Boutique V Gerunda Global BP FI
     isin: ES0131462220
     plataforma: MyInvestor
