@@ -1,0 +1,20 @@
+name: Prueba sonido FM
+on:
+  push:
+    branches: [prueba-fm]
+permissions:
+  contents: write
+jobs:
+  prueba:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q edge-tts imageio-ffmpeg
+      - run: python generar_y_enviar.py --guion prueba/guion.txt --titulares prueba/titulares.txt --salida prueba/briefing_prueba.mp3 --solo-audio
+      - run: |
+          git config user.name "prueba-fm"; git config user.email "prueba-fm@users.noreply.github.com"
+          git add prueba/briefing_prueba.mp3; git commit -m "Audio de prueba"; git push
