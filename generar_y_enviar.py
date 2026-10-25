@@ -2,10 +2,15 @@
 """
 Sintetiza el guion diario como MP3 y lo envia por correo.
 
-Cadena: edge-tts (principal) -> Piper (respaldo local) -> SMTP Gmail.
+Cadena: edge-tts (principal) -> Piper (respaldo local)
+        -> ambientacion de emisora FM de los 80 (audio/radio.py)
+        -> SMTP Gmail.
+
+Si la ambientacion falla, se envia la voz sin efectos: el briefing no se pierde.
 
 Uso:
     python generar_y_enviar.py --guion guion.txt --titulares titulares.txt
+    python generar_y_enviar.py --solo-audio      # genera el MP3 sin enviar (pruebas)
 
 Variables de entorno necesarias:
     GMAIL_USER           direccion remitente y destinataria
@@ -29,10 +34,12 @@ from pathlib import Path
 # --- Configuracion -----------------------------------------------------------
 
 VOZ_EDGE = "es-ES-AlvaroNeural"
-RITMO = "+5%"          # ligeramente por encima del natural, se escucha mejor de fondo
+RITMO = "+12%"         # ritmo de locutor de radio
+TONO = "-5Hz"          # algo mas grave, mas cuerpo de emisora
+ESTILO_RADIO = "fm"    # "fm" (emisora FM 80s) o "am" (transistor); None = sin efectos
 MODELO_PIPER = Path("voces/es_ES-davefx-medium.onnx")
 MAX_CHARS = 3000       # troceo por parrafos para no abrir sesiones websocket largas
-BITRATE = 48           # kbps, mono: ~2 MB para 5-6 minutos
+BITRATE = 64           # kbps, mono: ~3 MB para 5-6 minutos (la sintonia pide algo mas que 48)
 
 
 # --- Sintesis ----------------------------------------------------------------
@@ -59,7 +66,7 @@ async def _edge(texto: str, destino: Path) -> None:
     partes = []
     for i, trozo in enumerate(trocear(texto)):
         parcial = destino.with_suffix(f".{i:02d}.mp3")
-        await edge_tts.Communicate(trozo, VOZ_EDGE, rate=RITMO).save(str(parcial))
+        await edge_tts.Communicate(trozo, VOZ_EDGE, rate=RITMO, pitch=TONO).save(str(parcial))
         partes.append(parcial)
     # El formato por defecto de edge-tts ya es MP3 mono 48 kbps,
     # asi que basta concatenar los bytes: mismo codec y mismos parametros.
@@ -109,6 +116,32 @@ def sintetizar(texto: str, destino: Path) -> str:
         return "piper"
 
 
+def ambientar(mp3: Path) -> bool:
+    """Sintonia + tratamiento de emisora sobre el MP3, en el sitio.
+
+    Si algo falla, deja el MP3 original intacto y devuelve False.
+    """
+    if not ESTILO_RADIO:
+        return False
+    voz = mp3.with_suffix(".voz.mp3")
+    mp3.replace(voz)
+    try:
+        sys.path.insert(0, str(Path(__file__).parent / "audio"))
+        import radio
+        from imageio_ffmpeg import get_ffmpeg_exe
+        radio.ambientar(voz, mp3, ffmpeg=get_ffmpeg_exe(),
+                        estilo=ESTILO_RADIO, bitrate_k=BITRATE)
+        if mp3.stat().st_size < 10_000:
+            raise RuntimeError("salida vacia o truncada")
+        voz.unlink()
+        return True
+    except Exception as err:                      # noqa: BLE001
+        print(f"[aviso] ambientacion fallo ({err}); se envia la voz sin efectos",
+              file=sys.stderr)
+        voz.replace(mp3)
+        return False
+
+
 # --- Envio -------------------------------------------------------------------
 
 def destinatario() -> str:
@@ -116,17 +149,17 @@ def destinatario() -> str:
     return os.environ.get("DESTINATARIO") or os.environ["GMAIL_USER"]
 
 
-def duracion_min(mp3: Path) -> int:
+def duracion_min(mp3: Path, kbps: int) -> int:
     """Estimacion por tamano: fiable con bitrate constante."""
-    segundos = mp3.stat().st_size * 8 / (BITRATE * 1000)
+    segundos = mp3.stat().st_size * 8 / (kbps * 1000)
     return max(1, round(segundos / 60))
 
 
-def enviar(mp3: Path, titulares: list[str], motor: str) -> None:
+def enviar(mp3: Path, titulares: list[str], motor: str, kbps: int) -> None:
     usuario = os.environ["GMAIL_USER"]
     clave = os.environ["GMAIL_APP_PASSWORD"]
     hoy = date.today()
-    minutos = duracion_min(mp3)
+    minutos = duracion_min(mp3, kbps)
 
     cuerpo = [f"Briefing del {hoy.strftime('%d/%m/%Y')} — {minutos} min de audio.", ""]
     cuerpo += [f"- {t}" for t in titulares]
@@ -176,6 +209,8 @@ def main() -> int:
     parser.add_argument("--guion", default="guion.txt")
     parser.add_argument("--titulares", default="titulares.txt")
     parser.add_argument("--salida", default="briefing.mp3")
+    parser.add_argument("--solo-audio", action="store_true",
+                        help="genera el MP3 y no envia nada (pruebas)")
     args = parser.parse_args()
 
     guion = Path(args.guion).read_text(encoding="utf-8").strip()
@@ -194,11 +229,21 @@ def main() -> int:
         motor = sintetizar(guion, mp3)
     except Exception as err:                      # noqa: BLE001
         print(f"[error] ningun motor de voz funciono: {err}", file=sys.stderr)
-        enviar_solo_texto(guion, str(err))
+        if not args.solo_audio:
+            enviar_solo_texto(guion, str(err))
         return 1
 
-    enviar(mp3, titulares, motor)
-    print(f"Enviado: {mp3.name} ({mp3.stat().st_size // 1024} KB, motor={motor})")
+    # edge-tts entrega MP3 a 48 kbps; Piper y la ambientacion, a BITRATE
+    ambientado = ambientar(mp3)
+    kbps = BITRATE if (ambientado or motor == "piper") else 48
+    resumen = f"{mp3.name} ({mp3.stat().st_size // 1024} KB, motor={motor}, {kbps} kbps)"
+
+    if args.solo_audio:
+        print(f"Generado sin enviar: {resumen}")
+        return 0
+
+    enviar(mp3, titulares, motor, kbps)
+    print(f"Enviado: {resumen}")
     return 0
 
 
