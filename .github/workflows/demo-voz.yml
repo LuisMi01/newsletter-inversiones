@@ -1,0 +1,28 @@
+name: Demo de voces
+
+on:
+  push:
+    branches: [demo-voz]
+    paths: [audio/**, .github/workflows/demo-voz.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  muestras:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q edge-tts imageio-ffmpeg numpy
+      - run: python audio/demo_voces.py
+      - name: Subir las muestras a la rama
+        run: |
+          git config user.name "demo-voz"
+          git config user.email "demo-voz@users.noreply.github.com"
+          git add muestras/
+          git commit -m "Muestras de voz"
+          git push
